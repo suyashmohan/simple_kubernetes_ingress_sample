@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: second-deployment
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: second-deployment
+  template:
+    metadata:
+      labels:
+        app: second-deployment
+    spec:
+      containers:
+      - name: hello-kubernetes
+        image: paulbouwer/hello-kubernetes:1.5
+        ports:
+          - containerPort: 8080
+        env:
+        - name: MESSAGE
+          value: Hello from second Deployment
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: second-deployment
+spec:
+  type: ClusterIP
+  ports:
+  - port: 80
+    targetPort: 8080
+  selector:
+    app: second-deployment
